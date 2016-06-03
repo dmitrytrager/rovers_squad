@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+$LOAD_PATH << File.join(File.dirname(__FILE__))
+
+require 'app/mission'
+
+def input_file_name
+  ARGV[0]
+end
+
+def output_file_name
+  input_file_name.split('.').first + '_output.txt'
+end
+
+begin
+  File.open output_file_name, 'w' do |file|
+    file.write(
+      Mission
+        .new(File.new(input_file_name, 'r').read)
+        .tap(&:perform)
+        .result
+    )
+  end
+rescue Exception => e
+  puts "Exception: #{e}"
+  exit(1)
+end
